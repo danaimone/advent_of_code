@@ -14,9 +14,21 @@ class Password:
         print(f"Appears at least {self.at_most_times} times")
         print(f"Password: {self.password}")
 
-    def check_if_valid_pass(self):
+    def check_if_valid_pass_interpreted(self):
         character_count = self.password.count(self.letter)
         return self.at_least_times <= character_count <= self.at_most_times
+
+    def check_if_valid_pass_actual(self):
+        first_position_index = int(self.at_least_times - 1)
+        second_position_index = int(self.at_most_times - 1)
+
+        first_position = self.password.find(self.letter, first_position_index)
+        second_position = self.password.find(self.letter, second_position_index)
+
+        in_first_position = bool(first_position == first_position_index)
+        in_second_position = bool(second_position == second_position_index)
+
+        return in_first_position ^ in_second_position
 
 
 def password_policy(file_name, delimiter):
@@ -32,11 +44,11 @@ def password_policy(file_name, delimiter):
         at_least = int(rule[0])
         at_most = int(rule[1])
         password = Password(letter, at_least, at_most, password)
-        if password.check_if_valid_pass():
+        if password.check_if_valid_pass_actual():
             count += 1
 
     return count
 
 
 if __name__ == "__main__":
-    print(password_policy("passwords", " "))
+    print(password_policy("Day 2/passwords", " "))
